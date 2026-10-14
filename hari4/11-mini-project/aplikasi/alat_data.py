@@ -486,7 +486,7 @@ def daftar_sumur(area: AreaSumur | None = None, pompa: PompaSumur | None = None,
         pompa: Jenis pompa (pilihan terbatas).
         status: Status sumur (pilihan terbatas).
         urutkan: Urutan hasil (pilihan terbatas): minyak_tertinggi, water_cut_tertinggi, atau kode.
-        maks: Jumlah sumur yang ditampilkan (1 sampai 20).
+        maks: Jumlah sumur yang ditampilkan (minimal 1, tanpa batas atas; hasil tidak melebihi jumlah sumur yang cocok). Isi 1000 untuk menampilkan semua sumur, misalnya untuk menjawab sumur apa saja yang tersedia.
     """
     baris = _sumur()
     if area:
@@ -504,10 +504,10 @@ def daftar_sumur(area: AreaSumur | None = None, pompa: PompaSumur | None = None,
         baris = baris.sort_values(["wc", "kode_sumur"], ascending=[False, True])
     else:
         baris = baris.sort_values("kode_sumur")
-    tampil = max(1, min(maks, 20))
+    tampil = max(1, min(maks, len(baris)))
     minyak, air = baris["minyak_bopd"].sum(), baris["air_bwpd"].sum()
     teks = [f"{len(baris)} sumur cocok, total minyak {minyak} bopd, air {air} bwpd, water cut {_water_cut(minyak, air):.1f}%. "
-            f"Ditampilkan {min(len(baris), tampil)} pertama ({urutkan.replace('_', ' ')}):"]
+            f"Ditampilkan {tampil} pertama ({urutkan.replace('_', ' ')}):"]
     for _, r in baris.head(tampil).iterrows():
         teks.append(f"- {r['kode_sumur']} ({r['area']}, {r['pompa']}, {r['status']}): minyak {r['minyak_bopd']} bopd, "
                     f"air {r['air_bwpd']} bwpd, water cut {r['wc']:.1f}%")
