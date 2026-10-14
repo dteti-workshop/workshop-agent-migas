@@ -6,13 +6,13 @@
 # mini project: tool yang Anda tulis sendiri, pencarian dokumen (RAG), dan persetujuan manusia untuk tindakan tulis.
 #
 # - `lini_masa_sumur`: tool BARU, menggabungkan work order, laporan harian, dan narasi insiden untuk satu kode
-# - `cari_dokumen`: SOP dan laporan investigasi (peran hse boleh membaca INV-2026-011)
+# - `cari_dokumen_sop` dan `cari_dokumen_investigasi`: SOP dan laporan investigasi (INV-2026-011)
 # - `usulkan_tindakan_korektif`: tindakan tulis, hanya boleh disetujui atau ditolak
 #
 # Cara pakai:
-# 1. Salin file ini ke `hari4/11-mini-project/aplikasi/agen/investigasi_sumur.py`
-# 2. Jalankan `streamlit run hari4/11-mini-project/aplikasi/app.py` lalu pilih agen "investigasi_sumur"
-# 3. Uji kasusnya dengan `hari4/11-mini-project/code/04_uji_cepat.py` setelah mengisi `PILIHAN_AGEN = ["investigasi_sumur"]`
+# 1. Fasilitator: salin file ini ke `hari4/11-mini-project/aplikasi/agen/investigasi_sumur.py`, lalu jalankan
+#    `streamlit run hari4/11-mini-project/aplikasi/app.py` dan pilih agen "investigasi_sumur"
+# 2. Peserta: pola yang sama dapat ditulis di sel notebook (lihat Bagian 3 bab ini)
 #
 # Saat dijalankan langsung (bukan diimpor aplikasi), sel terakhir menguji kasusnya tanpa perlu menyalin file ke `agen/`.
 
@@ -26,12 +26,11 @@ from langchain.agents.middleware import HumanInTheLoopMiddleware
 from langchain.tools import tool
 
 from migas_shared.config import DATA, ROOT
-from migas_shared.rag_tools import KonteksPengguna, cari_dokumen
 
 # Agar `import alat_data` berhasil, baik dari folder solusi/ maupun setelah disalin ke aplikasi/agen/
 sys.path.insert(0, str(ROOT / "hari4" / "11-mini-project" / "aplikasi"))
 
-from alat_data import usulkan_tindakan_korektif
+from alat_data import cari_dokumen_investigasi, cari_dokumen_sop, usulkan_tindakan_korektif
 
 # %% [markdown]
 # ## Langkah 2 - Identitas agen untuk aplikasi
@@ -86,28 +85,28 @@ def lini_masa_sumur(kode_sumur: str, maks: int = 10) -> str:
 # Tindakan tulis `usulkan_tindakan_korektif` berhenti menunggu manusia: hanya boleh disetujui atau ditolak.
 
 # %%
-TOOLS = [lini_masa_sumur, cari_dokumen, usulkan_tindakan_korektif]
+TOOLS = [lini_masa_sumur, cari_dokumen_sop, cari_dokumen_investigasi, usulkan_tindakan_korektif]
 
 INSTRUKSI = """Anda asisten investigasi untuk petugas HSE di lapangan migas.
 Untuk riwayat kejadian sebuah sumur, pakai lini_masa_sumur. Untuk batas alarm, prosedur, dan temuan investigasi,
-pakai cari_dokumen dan beri sitasi [DOC_ID bagian]. Pisahkan dengan jelas apa yang berasal dari data dan apa dari dokumen.
-Usulkan tindakan korektif HANYA bila diminta, dengan nomor insiden dari pengguna. Jangan menyimpulkan penyebab
-yang tidak didukung data atau dokumen. Jawab dalam Bahasa Indonesia, ringkas."""
+pakai cari_dokumen_sop (prosedur) dan cari_dokumen_investigasi (temuan investigasi), dan beri sitasi [DOC_ID bagian]. Pisahkan dengan jelas apa yang berasal dari data dan apa dari dokumen.
+Usulkan tindakan korektif HANYA bila diminta. Dalam kasus itu langsung panggil usulkan_tindakan_korektif dengan nomor
+insiden dari pengguna, tanpa pencarian tambahan. Jangan menyimpulkan penyebab yang tidak didukung data atau dokumen. Jawab dalam Bahasa Indonesia, ringkas."""
 
 PERSETUJUAN = {"usulkan_tindakan_korektif": {"allowed_decisions": ["approve", "reject"]}}
 
 # %% [markdown]
 # ## Langkah 5 - Kasus uji
-# Daftar `KASUS_UJI` dibaca oleh `code/04_uji_cepat.py`; tiap kasus diperiksa di kode.
+# Daftar `KASUS_UJI` dipakai fasilitator untuk memeriksa agen ini; tiap kasus diperiksa di kode.
 
 # %%
 KASUS_UJI = [
     {"nama": "lini masa SR-027 memakai tool baru", "tanya": "Susun lini masa kejadian sumur SR-027.",
      "harus_tool": ["lini_masa_sumur"], "harus_ada": ["SR-027"], "tercatat": 0},
     {"nama": "temuan investigasi dari dokumen dengan sitasi", "tanya": "Apa temuan laporan investigasi H2S di sumur SR-027?",
-     "harus_tool": ["cari_dokumen"], "harus_ada": ["INV-2026-011"], "tercatat": 0, "peran": "hse"},
+     "harus_tool": ["cari_dokumen_investigasi"], "harus_ada": ["INV-2026-011"], "tercatat": 0},
     {"nama": "sumur tanpa kejadian dijawab jujur", "tanya": "Susun lini masa kejadian sumur ZZ-999.",
-     "harus_tool": ["lini_masa_sumur"], "harus_ada": ["tidak ada"], "tercatat": 0},
+     "harus_tool": ["lini_masa_sumur"], "harus_ada": ["tidak"], "tercatat": 0},
     {"nama": "tindakan korektif ditolak tidak tercatat", "tanya": "Usulkan tindakan korektif untuk insiden HSE-26-0004: beri pembatas pada pagar wellhead.",
      "keputusan": "tolak", "harus_tool": ["usulkan_tindakan_korektif"], "tercatat": 0},
 ]
@@ -124,7 +123,6 @@ def buat_agen(model, checkpointer):
         system_prompt=INSTRUKSI,
         middleware=[HumanInTheLoopMiddleware(interrupt_on=PERSETUJUAN)],
         checkpointer=checkpointer,
-        context_schema=KonteksPengguna,
     )
 
 # %% [markdown]

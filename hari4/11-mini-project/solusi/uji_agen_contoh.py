@@ -1,25 +1,22 @@
 # %% [markdown]
-# # Contoh 4: Uji Cepat Agen
-# Jalankan sel satu per satu dengan Shift+Enter, atau seluruh file: `python hari4/11-mini-project/code/04_uji_cepat.py`
+# # Uji Otomatis Agen Contoh (untuk fasilitator)
+# Jalankan sel satu per satu dengan Shift+Enter, atau seluruh file: `python hari4/11-mini-project/solusi/uji_agen_contoh.py`
 #
-# Agen yang terlihat bagus pada satu pertanyaan belum tentu bagus pada sepuluh pertanyaan. Setiap file di
-# `aplikasi/agen/` boleh memuat daftar `KASUS_UJI`. Skrip ini menjalankan semua kasus dan memeriksa HASILNYA DI KODE:
+# Peserta menguji agennya dengan mengamati, memakai aplikasi Panduan uji (Contoh 5). Skrip ini untuk fasilitator: ia menjalankan
+# `KASUS_UJI` pada empat agen contoh di `solusi/agen_contoh/` dan memeriksa HASILNYA DI KODE, sehingga perubahan pada tool,
+# prompt, atau model dapat diperiksa dengan cepat. Kunci yang dipakai setiap kasus:
 #
 # - `harus_tool`: tool-tool ini harus dipanggil
 # - `tanpa_tool`: tool-tool ini tidak boleh dipanggil (misalnya tool tulis tanpa diminta)
-# - `peran`: peran pengguna untuk kasus ini (default engineer), menentukan dokumen yang boleh dibaca
 # - `harus_ada`: kata atau angka yang harus muncul pada jawaban
 # - `keputusan`: 'setuju' atau 'tolak' (default tolak): jawaban reviewer berskrip kalau agen meminta persetujuan
 # - `tercatat`: berapa catatan tindakan yang harus bertambah (0 berarti tool tulis tidak boleh berjalan)
 #
 # Kasus "tercatat" memeriksa efek nyata pada data, bukan hanya apa yang diklaim agen dalam jawabannya.
-#
-# Sel pertama berisi `PILIHAN_AGEN`: daftar agen yang diuji. Bawaannya `saya` (agen Anda di `aplikasi/agen/saya.py`)
-# dan `perawatan` (agen contoh jadi di `solusi/agen_contoh/`, sebagai gambaran kasus uji yang lengkap). Ganti dengan
-# nama file agen kelompok Anda. Daftar kosong berarti semua agen di `aplikasi/agen/` yang punya `KASUS_UJI`.
+# Model bisa berbeda tiap eksekusi, jadi satu kasus kadang lolos dan kadang gagal; jalankan beberapa kali sebelum menyimpulkan.
 
 # %%
-# Langkah 1 - Memilih agen yang diuji
+# Langkah 1 - Memilih agen yang diuji (agen contoh di solusi/agen_contoh/)
 import sys
 
 from langgraph.checkpoint.memory import InMemorySaver
@@ -30,9 +27,9 @@ sys.path.insert(0, str(ROOT / "hari4" / "11-mini-project" / "aplikasi"))
 
 import kerangka as k
 
-PILIHAN_AGEN = ["saya", "perawatan"]  # nama file agen (tanpa .py); kosong = semua agen di agen/ yang punya KASUS_UJI
+PILIHAN_AGEN = ["operasi", "perawatan", "hse", "engineering"]  # nama file agen contoh (tanpa .py)
 
-pilihan = PILIHAN_AGEN or [n for n in k.daftar_agen() if getattr(k.muat_definisi(n), "KASUS_UJI", [])]
+pilihan = PILIHAN_AGEN
 print(f"Agen yang diuji: {pilihan}")
 
 # %% [markdown]

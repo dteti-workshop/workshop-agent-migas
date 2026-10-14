@@ -4,14 +4,14 @@ Isinya hal-hal yang sama untuk agen apa pun:
 
   daftar_agen(), muat_definisi(nama)  : menemukan dan memuat file di folder agen/ (dan agen contoh di solusi/agen_contoh/)
   bangun_agen(nama, checkpointer)     : membuat model dan agen dari file tersebut
+  daftarkan_agen(agen, judul, ...)    : mendaftarkan agen yang dirakit di sel notebook, agar tampil di aplikasi agen
   jalankan(...)                       : menjalankan agen sebagai aliran Peristiwa (teks, panggilan tool, hasil tool)
   persetujuan_menunggu(...)           : membaca dari state apakah agen sedang menunggu keputusan manusia
   pesan_untuk_tampilan(...)           : mengubah riwayat pesan menjadi bagian-bagian yang siap digambar
   tanya(...)                          : satu pertanyaan sampai selesai, termasuk 'reviewer' otomatis (untuk uji)
-  konteks_untuk(peran)                : fakta pengguna (peran) yang dikirim program ke agen
   jalankan_kasus(...)                 : satu kasus uji dari KASUS_UJI, diperiksa di kode
 
-Dipakai oleh app.py (Streamlit), code/ (contoh bab 11), dan uji_cepat.py.
+Dipakai oleh app.py (Streamlit) dan code/ (contoh bab 11).
 """
 import importlib
 import importlib.util
@@ -31,7 +31,6 @@ if str(FOLDER) not in sys.path:
     sys.path.insert(0, str(FOLDER))  # agar `from alat_data import ...` di file agen/ selalu bisa dipakai
 
 WAJIB = ("JUDUL", "PENGANTAR", "CONTOH_PERTANYAAN", "buat_agen")
-PERAN = ["operator", "engineer", "hse", "management"]
 
 
 class ErrorAgen(Exception):
@@ -54,6 +53,38 @@ class Penyimpanan:
 
     saver: InMemorySaver = field(default_factory=InMemorySaver)
     percakapan: dict[str, dict] = field(default_factory=dict)  # thread_id -> {"judul": ..., "agen": ...}
+
+
+@dataclass
+class AgenTerdaftar:
+    """Agen yang dirakit peserta di sel notebook (bukan dari file di folder agen/)."""
+
+    nama: str
+    judul: str
+    pengantar: str
+    contoh_pertanyaan: list[str]
+    agen: object
+
+
+# Registri milik proses. Aplikasi agen berjalan di proses yang sama dengan notebook, jadi agen yang didaftarkan
+# di sebuah sel langsung terlihat oleh aplikasi tanpa file perantara.
+AGEN_TERDAFTAR: dict[str, AgenTerdaftar] = {}
+
+
+def daftarkan_agen(agen, judul: str = "Agen Saya", pengantar: str = "", contoh_pertanyaan: list[str] | None = None) -> str:
+    """Daftarkan agen agar muncul di aplikasi agen. Mengembalikan namanya, mis. 'Agen Saya #2'.
+
+    Setiap pendaftaran membuat versi baru. Versi lama tetap ada (beserta riwayat percakapannya, yang disimpan
+    di checkpointer agen itu sendiri), sehingga Anda bisa membandingkan versi lama dan baru.
+    """
+    if not hasattr(agen, "get_state"):
+        raise TypeError("daftarkan_agen() menerima agen hasil create_agent(...). Isi dulu sel TODO yang membuat `agen`.")
+    if getattr(agen, "checkpointer", None) in (None, False):
+        raise ValueError("Agen belum punya checkpointer, jadi percakapan tidak bisa disimpan. Isi TODO checkpointer.")
+    nomor = sum(1 for a in AGEN_TERDAFTAR.values() if a.judul == judul) + 1
+    nama = f"{judul} #{nomor}"
+    AGEN_TERDAFTAR[nama] = AgenTerdaftar(nama, judul, pengantar or "Agen yang Anda rakit sendiri.", list(contoh_pertanyaan or []), agen)
+    return nama
 
 
 # ---------------------------------------------------------------------------
@@ -118,16 +149,6 @@ def bangun_agen(nama: str, checkpointer):
 # ---------------------------------------------------------------------------
 
 
-def konteks_untuk(peran: str = "engineer"):
-    """Fakta tentang pengguna yang dikirim PROGRAM ke agen (bukan oleh model). Peran menentukan dokumen yang boleh dibaca tool pencarian.
-
-    Di aplikasi, peran dipilih di sidebar. Di penggunaan nyata, nilainya berasal dari sistem login.
-    """
-    from migas_shared.rag_tools import KonteksPengguna
-
-    return KonteksPengguna(role=peran, area="Seruni", user_id="peserta")
-
-
 def teks_dari(isi) -> str:
     """Isi pesan bisa berupa string atau daftar blok (model penalar). Ambil teksnya saja."""
     if isinstance(isi, str):
@@ -139,14 +160,13 @@ def _config(thread_id: str) -> dict:
     return {"configurable": {"thread_id": thread_id}}
 
 
-def jalankan(agen, masukan, thread_id: str, konteks=None) -> Iterator[Peristiwa]:
+def jalankan(agen, masukan, thread_id: str) -> Iterator[Peristiwa]:
     """Jalankan agen dan keluarkan Peristiwa saat terjadi.
 
     masukan : {"messages": [...]} untuk giliran baru, atau Command(resume=...) untuk melanjutkan setelah interrupt.
     Setelah iterator habis, panggil persetujuan_menunggu() untuk tahu apakah agen berhenti menunggu manusia.
     """
-    kw = {"context": konteks} if konteks is not None else {}
-    for mode, data in agen.stream(masukan, _config(thread_id), stream_mode=["messages", "updates"], **kw):
+    for mode, data in agen.stream(masukan, _config(thread_id), stream_mode=["messages", "updates"]):
         if mode == "messages":
             chunk, meta = data
             if isinstance(chunk, AIMessageChunk) and meta.get("langgraph_node") == "model" and chunk.text:
@@ -192,7 +212,7 @@ class Hasil:
     keputusan: list[tuple[str, str]] = field(default_factory=list)  # (nama tool, jenis keputusan)
 
 
-def tanya(agen, pertanyaan: str, thread_id: str, konteks=None,
+def tanya(agen, pertanyaan: str, thread_id: str,
           reviewer: Callable[[dict, list[str]], dict] = keputusan_tolak) -> Hasil:
     """Satu pertanyaan sampai agen selesai. Setiap permintaan persetujuan dijawab oleh `reviewer`.
 
@@ -201,7 +221,7 @@ def tanya(agen, pertanyaan: str, thread_id: str, konteks=None,
     hasil = Hasil(jawaban="")
     masukan = {"messages": [HumanMessage(content=pertanyaan)]}
     while True:
-        for p in jalankan(agen, masukan, thread_id, konteks):
+        for p in jalankan(agen, masukan, thread_id):
             if p.jenis == "tool":
                 hasil.tool.append(p.nama)
         menunggu = persetujuan_menunggu(agen, thread_id)
@@ -220,11 +240,14 @@ REVIEWER = {"setuju": keputusan_setuju, "tolak": keputusan_tolak}
 
 
 def jalankan_kasus(agen, kasus: dict, thread_id: str) -> list[str]:
-    """Jalankan satu kasus uji (lihat code/04_uji_cepat.py) dan kembalikan daftar kegagalan; kosong berarti lolos."""
+    """Jalankan satu kasus uji dari KASUS_UJI sebuah agen contoh dan kembalikan daftar kegagalan; kosong berarti lolos.
+
+    Dipakai fasilitator untuk memeriksa agen contoh. Peserta menilai agennya sendiri lewat panduan uji.
+    """
     import alat_data
 
     sebelum = len(alat_data.CATATAN_TINDAKAN)
-    hasil = tanya(agen, kasus["tanya"], thread_id, konteks_untuk(kasus.get("peran", "engineer")), REVIEWER[kasus.get("keputusan", "tolak")])
+    hasil = tanya(agen, kasus["tanya"], thread_id, REVIEWER[kasus.get("keputusan", "tolak")])
     gagal = []
     for t in kasus.get("harus_tool", []):
         if t not in hasil.tool:
@@ -274,6 +297,14 @@ def pesan_untuk_tampilan(agen, thread_id: str) -> list[dict]:
             _, nama, args, _ = giliran[g]["bagian"][b]
             giliran[g]["bagian"][b] = ("tool", nama, args, teks_dari(m.content))
     return giliran
+
+
+def nama_tool_agen(agen) -> list[str]:
+    """Nama tool yang terpasang pada agen hasil create_agent (kosong bila tidak ada atau tidak terbaca)."""
+    try:
+        return list(agen.nodes["tools"].bound.tools_by_name)
+    except (AttributeError, KeyError):
+        return []
 
 
 def judul_dari(teks: str, maks: int = 36) -> str:

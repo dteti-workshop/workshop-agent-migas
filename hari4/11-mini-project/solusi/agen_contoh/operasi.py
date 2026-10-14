@@ -6,10 +6,9 @@ Mencatat serah terima adalah tindakan tulis, jadi harus disetujui manusia.
 from langchain.agents import create_agent
 from langchain.agents.middleware import HumanInTheLoopMiddleware
 
-from migas_shared.field_tools import cek_status_sumur, hitung_water_cut
-from migas_shared.rag_tools import KonteksPengguna
+from migas_shared.field_tools import hitung_water_cut
 
-from alat_data import catat_serah_terima, laporan_harian, ringkasan_produksi_bulanan
+from alat_data import catat_serah_terima, cek_status_sumur, laporan_harian, ringkasan_produksi_bulanan
 
 JUDUL = "Asisten Pengawas Shift"
 PENGANTAR = "Membaca laporan harian GS-SR1 Juli 2026 dan status sumur. Catatan serah terima baru disimpan setelah Anda setujui."
@@ -49,5 +48,4 @@ def buat_agen(model, checkpointer):
         system_prompt=INSTRUKSI,
         middleware=[HumanInTheLoopMiddleware(interrupt_on=PERSETUJUAN)],
         checkpointer=checkpointer,
-        context_schema=KonteksPengguna,
     )

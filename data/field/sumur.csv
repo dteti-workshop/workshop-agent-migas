@@ -1,0 +1,197 @@
+kode_sumur,area,stasiun,pompa,status,minyak_bopd,air_bwpd,frekuensi_vsd_hz,diperbarui,catatan
+SR-001,Seruni,GS-SR1,ESP,Produksi,77,349,46,2026-07-31,Kebocoran kecil di wellhead sudah ditangani
+SR-002,Seruni,GS-SR1,ESP,Produksi,61,357,50,2026-07-31,Normal
+SR-003,Seruni,GS-SR1,ESP,Produksi,46,353,42,2026-07-31,Normal
+SR-004,Seruni,GS-SR1,ESP,Shut-in,0,0,,2026-07-31,Shut-in sejak Mei karena water cut sangat tinggi
+SR-005,Seruni,GS-SR1,ESP,Produksi,116,2264,47,2026-07-31,Normal
+SR-006,Seruni,GS-SR1,ESP,Produksi,42,334,51,2026-07-31,Normal
+SR-007,Seruni,GS-SR1,ESP,Produksi,112,592,48,2026-07-31,Normal
+SR-008,Seruni,GS-SR1,ESP,Produksi,48,245,51,2026-07-31,Normal
+SR-009,Seruni,GS-SR1,ESP,Menunggu pulling,0,0,,2026-07-31,"Motor ESP ground fault, menunggu jadwal rig workover"
+SR-010,Seruni,GS-SR1,ESP,Produksi,101,765,43,2026-07-31,Normal
+SR-011,Seruni,GS-SR1,ESP,Produksi,98,1232,51,2026-07-31,Uji sumur terakhir sesuai tren
+SR-012,Seruni,GS-SR1,ESP,Produksi,84,528,51,2026-07-31,Kebocoran kecil di wellhead sudah ditangani
+SR-013,Seruni,GS-SR1,ESP,Produksi,80,438,43,2026-07-31,Setpoint VSD diturunkan untuk menghindari underload
+SR-014,Seruni,GS-SR1,ESP,Produksi,85,626,46,2026-07-31,"ESP trip overload dua kali pada Juli (3 dan 30 Juli), flushing dilakukan; usulan evaluasi sand control"
+SR-015,Seruni,GS-SR1,ESP,Produksi,86,667,53,2026-07-31,Normal
+SR-016,Seruni,GS-SR1,ESP,Produksi,79,1251,49,2026-07-31,Normal
+SR-017,Seruni,GS-SR1,ESP,Produksi,54,607,42,2026-07-31,Normal
+SR-018,Seruni,GS-SR1,ESP,Workover,0,0,,2026-07-31,"Workover: ganti ESP dan power cable, selesai perkiraan awal Agustus"
+SR-019,Seruni,GS-SR1,ESP,Produksi,130,937,52,2026-07-31,Normal
+SR-020,Seruni,GS-SR1,ESP,Produksi,120,480,52,2026-07-31,"ESP trip overload kemarin sore, stabil sejak pukul 18.00"
+SR-021,Seruni,GS-SR1,ESP,Produksi,119,2146,51,2026-07-31,Normal
+SR-022,Seruni,GS-SR1,ESP,Produksi,62,353,50,2026-07-31,Normal
+SR-023,Seruni,GS-SR1,ESP,Produksi,118,1402,50,2026-07-31,Normal
+SR-024,Seruni,GS-SR1,ESP,Produksi,64,730,42,2026-07-31,Normal
+SR-025,Seruni,GS-SR1,ESP,Shut-in,0,0,,2026-07-31,Shut-in sementara menunggu perbaikan flowline
+SR-026,Seruni,GS-SR1,ESP,Produksi,70,1181,47,2026-07-31,Normal
+SR-027,Seruni,GS-SR1,ESP,Produksi,95,380,50,2026-07-31,"Pembacaan H2S 12 ppm pada 22 Juli 2026, dalam investigasi HSE; setpoint VSD diturunkan ke 50 Hz sejak 9 Juli karena underload"
+SR-028,Seruni,GS-SR1,ESP,Produksi,75,554,45,2026-07-31,Normal
+SR-029,Seruni,GS-SR1,ESP,Produksi,100,996,53,2026-07-31,Normal
+SR-030,Seruni,GS-SR1,ESP,Produksi,44,212,44,2026-07-31,Uji sumur terakhir sesuai tren
+SR-031,Seruni,GS-SR1,ESP,Menunggu pulling,0,0,,2026-07-31,"Pompa ESP macet, menunggu jadwal rig"
+SR-032,Seruni,GS-SR1,ESP,Produksi,61,305,48,2026-07-31,Normal
+SR-033,Seruni,GS-SR1,ESP,Produksi,102,460,51,2026-07-31,Normal
+SR-034,Seruni,GS-SR1,ESP,Produksi,74,1126,45,2026-07-31,Uji sumur terakhir sesuai tren
+SR-035,Seruni,GS-SR1,ESP,Produksi,59,1014,52,2026-07-31,Normal
+SR-036,Seruni,GS-SR1,ESP,Produksi,110,668,46,2026-07-31,Normal
+SR-037,Seruni,GS-SR1,ESP,Produksi,67,1131,49,2026-07-31,Normal
+SR-038,Seruni,GS-SR1,ESP,Produksi,44,616,45,2026-07-31,Kebocoran kecil di wellhead sudah ditangani
+SR-039,Seruni,GS-SR1,ESP,Produksi,52,430,45,2026-07-31,Normal
+SR-040,Seruni,GS-SR1,ESP,Produksi,75,518,45,2026-07-31,Setpoint VSD diturunkan untuk menghindari underload
+SR-041,Seruni,GS-SR1,ESP,Produksi,102,656,48,2026-07-31,"Kabel ESP ground fault 19 Juli, power cable diganti oleh rig sejak 21 Juli; sudah berproduksi kembali"
+SR-042,Seruni,GS-SR1,ESP,Produksi,100,781,50,2026-07-31,Normal
+SR-043,Seruni,GS-SR1,ESP,Shut-in,0,0,,2026-07-31,Shut-in karena produksi tidak ekonomis
+SR-044,Seruni,GS-SR1,ESP,Produksi,65,344,43,2026-07-31,Normal
+SR-045,Seruni,GS-SR1,ESP,Produksi,87,1671,49,2026-07-31,Normal
+SR-046,Seruni,GS-SR1,ESP,Workover,0,0,,2026-07-31,"Workover: stimulasi sumur, produksi dibuka kembali setelah uji sumur"
+SR-047,Seruni,GS-SR1,ESP,Produksi,90,1781,48,2026-07-31,Normal
+SR-048,Seruni,GS-SR1,ESP,Produksi,50,338,52,2026-07-31,Normal
+SR-049,Seruni,GS-SR1,ESP,Produksi,60,520,48,2026-07-31,Normal
+SR-050,Seruni,GS-SR1,ESP,Produksi,70,362,48,2026-07-31,Setpoint VSD diturunkan untuk menghindari underload
+SR-051,Seruni,GS-SR1,ESP,Produksi,88,697,47,2026-07-31,Normal
+SR-052,Seruni,GS-SR1,ESP,Produksi,75,1291,54,2026-07-31,Normal
+SR-053,Seruni,GS-SR1,ESP,Produksi,67,294,45,2026-07-31,Normal
+SR-054,Seruni,GS-SR1,ESP,Produksi,80,719,52,2026-07-31,Kebocoran kecil di wellhead sudah ditangani
+SR-055,Seruni,GS-SR1,ESP,Menunggu pulling,0,0,,2026-07-31,"Menunggu pulling, tekanan tubing tidak naik setelah restart"
+SR-056,Seruni,GS-SR1,ESP,Produksi,86,830,48,2026-07-31,Normal
+SR-057,Seruni,GS-SR1,ESP,Produksi,73,360,52,2026-07-31,Normal
+SR-058,Seruni,GS-SR1,ESP,Produksi,115,764,44,2026-07-31,Normal
+SR-059,Seruni,GS-SR1,ESP,Produksi,58,604,47,2026-07-31,Normal
+SR-060,Seruni,GS-SR1,ESP,Produksi,36,669,42,2026-07-31,Normal
+SR-061,Seruni,GS-SR1,ESP,Produksi,56,445,53,2026-07-31,Normal
+SR-062,Seruni,GS-SR1,ESP,Produksi,90,466,47,2026-07-31,Uji sumur terakhir sesuai tren
+KN-001,Kenanga,GS-KN1,SRP,Produksi,37,111,,2026-07-31,Normal
+KN-002,Kenanga,GS-KN1,SRP,Produksi,28,56,,2026-07-31,Normal
+KN-005,Kenanga,GS-KN1,SRP,Produksi,34,90,,2026-07-31,Stroke diperpanjang untuk menaikkan laju
+KN-007,Kenanga,GS-KN1,SRP,Produksi,70,68,,2026-07-31,Normal
+KN-008,Kenanga,GS-KN1,SRP,Produksi,33,58,,2026-07-31,Normal
+KN-009,Kenanga,GS-KN1,SRP,Menunggu pulling,0,0,,2026-07-31,"Tubing bocor, menunggu pulling"
+KN-010,Kenanga,GS-KN1,SRP,Produksi,30,84,,2026-07-31,Normal
+KN-011,Kenanga,GS-KN1,SRP,Produksi,21,26,,2026-07-31,"Produksi turun, cek fluid level"
+KN-013,Kenanga,GS-KN1,SRP,Produksi,31,76,,2026-07-31,Normal
+KN-017,Kenanga,GS-KN1,SRP,Produksi,17,63,,2026-07-31,Normal
+KN-018,Kenanga,GS-KN1,SRP,Produksi,55,57,,2026-07-31,Normal
+KN-019,Kenanga,GS-KN1,SRP,Produksi,19,28,,2026-07-31,Normal
+KN-021,Kenanga,GS-KN1,SRP,Produksi,17,56,,2026-07-31,Normal
+KN-027,Kenanga,GS-KN1,SRP,Produksi,39,110,,2026-07-31,Normal
+KN-029,Kenanga,GS-KN1,SRP,Produksi,66,84,,2026-07-31,Uji sumur terakhir sesuai tren
+KN-033,Kenanga,GS-KN1,SRP,Menunggu pulling,0,0,,2026-07-31,"Sucker rod patah, menunggu jadwal rig"
+KN-036,Kenanga,GS-KN1,SRP,Produksi,36,69,,2026-07-31,Normal
+KN-039,Kenanga,GS-KN1,SRP,Produksi,24,15,,2026-07-31,Uji sumur terakhir sesuai tren
+KN-041,Kenanga,GS-KN1,SRP,Produksi,67,34,,2026-07-31,Normal
+KN-043,Kenanga,GS-KN1,SRP,Produksi,39,99,,2026-07-31,Dynamometer menunjukkan pump fillage rendah
+KN-044,Kenanga,GS-KN1,SRP,Produksi,28,73,,2026-07-31,Normal
+KN-047,Kenanga,GS-KN1,SRP,Produksi,17,39,,2026-07-31,Stuffing box diganti
+KN-048,Kenanga,GS-KN1,SRP,Produksi,51,34,,2026-07-31,Normal
+KN-050,Kenanga,GS-KN1,SRP,Produksi,55,105,,2026-07-31,"Rod string diganti bulan lalu, kinerja baik"
+KN-051,Kenanga,GS-KN1,SRP,Produksi,33,69,,2026-07-31,Normal
+KN-053,Kenanga,GS-KN1,SRP,Produksi,40,14,,2026-07-31,Normal
+KN-054,Kenanga,GS-KN1,SRP,Produksi,39,121,,2026-07-31,Normal
+KN-056,Kenanga,GS-KN1,SRP,Produksi,29,67,,2026-07-31,Normal
+KN-061,Kenanga,GS-KN1,SRP,Produksi,22,28,,2026-07-31,Normal
+KN-062,Kenanga,GS-KN1,SRP,Produksi,46,35,,2026-07-31,Normal
+KN-063,Kenanga,GS-KN1,SRP,Produksi,37,32,,2026-07-31,Normal
+KN-065,Kenanga,GS-KN1,SRP,Workover,0,0,,2026-07-31,Workover: stimulasi sumur
+KN-066,Kenanga,GS-KN1,SRP,Produksi,57,38,,2026-07-31,Normal
+KN-067,Kenanga,GS-KN1,SRP,Shut-in,0,0,,2026-07-31,Shut-in karena aliran balik pasir tinggi
+KN-069,Kenanga,GS-KN1,SRP,Produksi,38,106,,2026-07-31,Normal
+KN-070,Kenanga,GS-KN1,SRP,Produksi,22,25,,2026-07-31,Stroke diperpanjang untuk menaikkan laju
+KN-071,Kenanga,GS-KN1,SRP,Produksi,35,16,,2026-07-31,Normal
+KN-074,Kenanga,GS-KN1,SRP,Shut-in,0,0,,2026-07-31,Shut-in karena aliran balik pasir tinggi
+KN-075,Kenanga,GS-KN1,SRP,Produksi,88,63,,2026-07-31,Stroke diperpanjang untuk menaikkan laju
+KN-076,Kenanga,GS-KN1,SRP,Shut-in,0,0,,2026-07-31,Shut-in karena aliran balik pasir tinggi
+KN-077,Kenanga,GS-KN1,SRP,Produksi,12,37,,2026-07-31,Sering gagal pompa dan rod; masuk daftar evaluasi desain pompa
+KN-080,Kenanga,GS-KN1,SRP,Produksi,28,24,,2026-07-31,Normal
+KN-082,Kenanga,GS-KN1,SRP,Produksi,17,6,,2026-07-31,Normal
+KN-084,Kenanga,GS-KN1,SRP,Produksi,62,33,,2026-07-31,Normal
+KN-087,Kenanga,GS-KN1,SRP,Produksi,37,65,,2026-07-31,Normal
+KN-088,Kenanga,GS-KN1,SRP,Produksi,11,8,,2026-07-31,Uji sumur terakhir sesuai tren
+KN-089,Kenanga,GS-KN1,SRP,Produksi,21,8,,2026-07-31,Normal
+KN-090,Kenanga,GS-KN1,SRP,Produksi,30,52,,2026-07-31,Normal
+KN-097,Kenanga,GS-KN1,SRP,Workover,0,0,,2026-07-31,Workover: ganti pompa dan tubing
+KN-098,Kenanga,GS-KN1,SRP,Produksi,51,23,,2026-07-31,Uji sumur terakhir sesuai tren
+KN-099,Kenanga,GS-KN1,SRP,Menunggu pulling,0,0,,2026-07-31,"Sucker rod patah, menunggu jadwal rig"
+KN-100,Kenanga,GS-KN1,SRP,Produksi,9,8,,2026-07-31,Normal
+KN-102,Kenanga,GS-KN2,SRP,Produksi,37,20,,2026-07-31,Normal
+KN-103,Kenanga,GS-KN2,SRP,Menunggu pulling,0,0,,2026-07-31,"Menunggu jadwal rig, pompa macet"
+KN-106,Kenanga,GS-KN2,SRP,Produksi,9,4,,2026-07-31,Normal
+KN-107,Kenanga,GS-KN2,SRP,Produksi,20,8,,2026-07-31,"Rod string diganti bulan lalu, kinerja baik"
+KN-108,Kenanga,GS-KN2,SRP,Produksi,30,120,,2026-07-31,Stroke diperpanjang untuk menaikkan laju
+KN-110,Kenanga,GS-KN2,SRP,Produksi,28,110,,2026-07-31,Normal
+KN-111,Kenanga,GS-KN2,SRP,Produksi,30,69,,2026-07-31,"Sumur steamflood; flowline panas, wajib sarung tangan tahan panas"
+KN-112,Kenanga,GS-KN2,SRP,Produksi,26,17,,2026-07-31,Rod string aus berulang; dijadwalkan evaluasi dengan ahli artificial lift
+KN-115,Kenanga,GS-KN2,SRP,Produksi,43,103,,2026-07-31,Normal
+KN-119,Kenanga,GS-KN2,SRP,Produksi,17,17,,2026-07-31,Normal
+KN-120,Kenanga,GS-KN2,SRP,Produksi,33,19,,2026-07-31,Stroke diperpanjang untuk menaikkan laju
+KN-124,Kenanga,GS-KN2,SRP,Menunggu pulling,0,0,,2026-07-31,"Tubing bocor, menunggu pulling"
+KN-128,Kenanga,GS-KN2,SRP,Produksi,22,13,,2026-07-31,Normal
+KN-131,Kenanga,GS-KN2,SRP,Produksi,21,23,,2026-07-31,Normal
+KN-136,Kenanga,GS-KN2,SRP,Produksi,22,8,,2026-07-31,Normal
+KN-138,Kenanga,GS-KN2,SRP,Produksi,40,31,,2026-07-31,Stroke diperpanjang untuk menaikkan laju
+KN-141,Kenanga,GS-KN2,SRP,Produksi,39,66,,2026-07-31,Uji sumur terakhir sesuai tren
+KN-146,Kenanga,GS-KN2,SRP,Produksi,27,31,,2026-07-31,Normal
+KN-151,Kenanga,GS-KN2,SRP,Produksi,28,71,,2026-07-31,Normal
+KN-154,Kenanga,GS-KN2,SRP,Produksi,40,39,,2026-07-31,Normal
+KN-156,Kenanga,GS-KN2,SRP,Produksi,30,35,,2026-07-31,"Rod string diganti bulan lalu, kinerja baik"
+KN-157,Kenanga,GS-KN2,SRP,Produksi,40,134,,2026-07-31,Stroke diperpanjang untuk menaikkan laju
+KN-158,Kenanga,GS-KN2,SRP,Produksi,19,13,,2026-07-31,Stroke diperpanjang untuk menaikkan laju
+KN-159,Kenanga,GS-KN2,SRP,Produksi,21,15,,2026-07-31,Normal
+KN-160,Kenanga,GS-KN2,SRP,Produksi,25,79,,2026-07-31,"Produksi turun, cek fluid level"
+KN-163,Kenanga,GS-KN2,SRP,Produksi,68,189,,2026-07-31,Normal
+KN-164,Kenanga,GS-KN2,SRP,Menunggu pulling,0,0,,2026-07-31,"Menunggu jadwal rig, pompa macet"
+KN-165,Kenanga,GS-KN2,SRP,Produksi,33,71,,2026-07-31,Normal
+KN-166,Kenanga,GS-KN2,SRP,Produksi,27,20,,2026-07-31,Normal
+KN-169,Kenanga,GS-KN2,SRP,Produksi,50,104,,2026-07-31,"Rod string diganti bulan lalu, kinerja baik"
+KN-175,Kenanga,GS-KN2,SRP,Produksi,24,52,,2026-07-31,Normal
+KN-177,Kenanga,GS-KN2,SRP,Produksi,30,23,,2026-07-31,Normal
+KN-178,Kenanga,GS-KN2,SRP,Produksi,55,88,,2026-07-31,Normal
+KN-179,Kenanga,GS-KN2,SRP,Produksi,73,58,,2026-07-31,Normal
+ML-001,Melati,GS-ML1,ESP,Produksi,91,230,54,2026-07-31,"Produksi turun sekitar 10% dalam dua minggu, jadwalkan uji sumur"
+ML-002,Melati,GS-ML1,ESP,Produksi,91,354,50,2026-07-31,Uji sumur terakhir sesuai tren
+ML-003,Melati,GS-ML1,ESP,Produksi,129,879,54,2026-07-31,Normal
+ML-004,Melati,GS-ML1,ESP,Produksi,134,596,50,2026-07-31,Normal
+ML-005,Melati,GS-ML1,PCP,Produksi,55,282,,2026-07-31,Normal
+ML-006,Melati,GS-ML1,ESP,Produksi,71,287,51,2026-07-31,Normal
+ML-007,Melati,GS-ML1,PCP,Produksi,32,52,,2026-07-31,Normal
+ML-008,Melati,GS-ML1,ESP,Produksi,82,437,54,2026-07-31,"Produksi turun sekitar 10% dalam dua minggu, jadwalkan uji sumur"
+ML-009,Melati,GS-ML1,ESP,Workover,0,0,,2026-07-31,Workover: ganti pompa dan tubing
+ML-010,Melati,GS-ML1,ESP,Produksi,90,804,46,2026-07-31,Normal
+ML-011,Melati,GS-ML1,ESP,Shut-in,0,0,,2026-07-31,Shut-in sementara selama pekerjaan flowline
+ML-012,Melati,GS-ML1,ESP,Produksi,85,340,49,2026-07-31,Normal
+ML-013,Melati,GS-ML1,ESP,Produksi,25,70,50,2026-07-31,Normal
+ML-014,Melati,GS-ML1,ESP,Produksi,64,442,44,2026-07-31,Normal
+ML-015,Melati,GS-ML1,ESP,Produksi,123,300,42,2026-07-31,Normal
+ML-016,Melati,GS-ML1,ESP,Shut-in,0,0,,2026-07-31,Shut-in karena aliran balik pasir tinggi
+ML-017,Melati,GS-ML1,ESP,Produksi,128,648,46,2026-07-31,"Arus motor sedikit fluktuatif, dipantau"
+ML-018,Melati,GS-ML1,ESP,Produksi,165,499,47,2026-07-31,"Arus motor sedikit fluktuatif, dipantau"
+ML-019,Melati,GS-ML1,ESP,Menunggu pulling,0,0,,2026-07-31,"Sucker rod patah, menunggu jadwal rig"
+ML-020,Melati,GS-ML1,ESP,Produksi,78,360,51,2026-07-31,Normal
+ML-021,Melati,GS-ML1,ESP,Produksi,60,404,43,2026-07-31,"Arus motor sedikit fluktuatif, dipantau"
+ML-022,Melati,GS-ML1,ESP,Produksi,46,187,52,2026-07-31,Normal
+ML-023,Melati,GS-ML1,ESP,Produksi,55,195,43,2026-07-31,Normal
+ML-024,Melati,GS-ML1,ESP,Produksi,79,726,54,2026-07-31,Normal
+ML-025,Melati,GS-ML1,ESP,Produksi,56,161,45,2026-07-31,Normal
+ML-026,Melati,GS-ML1,ESP,Produksi,118,863,46,2026-07-31,Normal
+ML-027,Melati,GS-ML1,PCP,Produksi,120,86,,2026-07-31,Water cut naik bertahap
+ML-028,Melati,GS-ML1,PCP,Produksi,31,132,,2026-07-31,Normal
+ML-029,Melati,GS-ML1,ESP,Produksi,58,297,50,2026-07-31,Normal
+ML-030,Melati,GS-ML1,PCP,Produksi,33,46,,2026-07-31,Normal
+ML-031,Melati,GS-ML1,PCP,Workover,0,0,,2026-07-31,Workover: perbaikan casing
+ML-032,Melati,GS-ML1,PCP,Produksi,23,18,,2026-07-31,Normal
+ML-033,Melati,GS-ML1,PCP,Produksi,113,76,,2026-07-31,Normal
+ML-034,Melati,GS-ML1,PCP,Produksi,23,51,,2026-07-31,"Torsi rotor naik, dipantau"
+ML-035,Melati,GS-ML1,PCP,Produksi,46,97,,2026-07-31,Normal
+ML-036,Melati,GS-ML1,PCP,Produksi,115,309,,2026-07-31,Normal
+ML-037,Melati,GS-ML1,PCP,Shut-in,0,0,,2026-07-31,Shut-in sementara selama pekerjaan flowline
+ML-038,Melati,GS-ML1,PCP,Produksi,73,88,,2026-07-31,Normal
+ML-039,Melati,GS-ML1,PCP,Produksi,30,40,,2026-07-31,Uji sumur terakhir sesuai tren
+ML-040,Melati,GS-ML1,ESP,Shut-in,0,0,,2026-07-31,Shut-in karena aliran balik pasir tinggi
+ML-041,Melati,GS-ML1,PCP,Produksi,36,72,,2026-07-31,Normal
+ML-042,Melati,GS-ML1,PCP,Produksi,65,75,,2026-07-31,Normal
+ML-043,Melati,GS-ML1,PCP,Menunggu pulling,0,0,,2026-07-31,"Menunggu jadwal rig, pompa macet"
+ML-044,Melati,GS-ML1,ESP,Shut-in,0,0,,2026-07-31,Shut-in karena aliran balik pasir tinggi
+ML-045,Melati,GS-ML1,PCP,Produksi,83,300,,2026-07-31,Water cut naik bertahap
+ML-046,Melati,GS-ML1,PCP,Produksi,19,39,,2026-07-31,Normal
+ML-047,Melati,GS-ML1,PCP,Produksi,72,50,,2026-07-31,Normal
+ML-048,Melati,GS-ML1,PCP,Produksi,17,23,,2026-07-31,Normal

@@ -1,21 +1,18 @@
 # %% [markdown]
-# # Contoh 2: Merakit Agen dari Tiga Keping
+# # Contoh 2: Merakit Agen dengan create_agent
 # Jalankan sel satu per satu dengan Shift+Enter, atau seluruh file: `python hari4/11-mini-project/code/02_rakit_agen.py`
 #
-# Agen mini project selalu disusun dari tiga keping yang Anda pilih sendiri:
+# Sebuah agen dirakit dengan satu panggilan `create_agent(...)`. Yang Anda tentukan:
 #
-# 1. TOOLS: tool apa yang boleh dipakai agen (dari katalog di contoh 1)
-# 2. INSTRUKSI: peran dan aturan agen (dari bank prompt di `aplikasi/prompt_bank.py`, atau tulis sendiri)
-# 3. PERSETUJUAN: tool tulis mana yang berhenti menunggu manusia (interrupt), dan keputusan apa yang diizinkan
+# 1. `tools`: tool apa yang boleh dipakai agen (dari penjelajah di Contoh 1)
+# 2. `system_prompt`: peran dan aturan agen, berupa teks biasa
+# 3. `middleware`: `HumanInTheLoopMiddleware(interrupt_on={...})` untuk tool yang harus menunggu persetujuan manusia (bab 6)
+# 4. `checkpointer`: penyimpan keadaan agen, supaya percakapan diingat dan agen bisa berhenti menunggu keputusan (bab 5)
 #
-# Contoh ini merakit agen Perawatan langkah demi langkah, lalu menjalankannya dari terminal tanpa UI. Reviewer-nya
-# berupa fungsi berskrip: menyetujui, mengubah, dan menolak. Hasilnya diperiksa di kode, yaitu isi `CATATAN_TINDAKAN`,
-# bukan kalimat jawaban agen. Agen bisa saja menulis "work order dibuat" tanpa benar-benar memanggil tool.
-#
-# Kalau agen sudah bekerja di terminal, menyalin ketiga keping ke `aplikasi/agen/saya.py` akan membuatnya tampil di aplikasi.
+# Contoh ini merakit agen untuk use case Operasi. Di Contoh 3 Anda merakit agen Anda sendiri dengan cara yang sama.
 
 # %%
-# Langkah 1 - Mengimpor kerangka aplikasi dan komponen agen
+# Langkah 1 - Mengimpor bahan perakitan
 import sys
 
 from langchain.agents import create_agent
@@ -24,125 +21,74 @@ from langgraph.checkpoint.memory import InMemorySaver
 
 from migas_shared.config import ROOT
 from migas_shared.llm import get_chat_model
-from migas_shared.rag_tools import KonteksPengguna
 
 sys.path.insert(0, str(ROOT / "hari4" / "11-mini-project" / "aplikasi"))
 
 import alat_data as a
 import kerangka as k
-from prompt_bank import PERTANYAAN, susun_prompt
 
 # %% [markdown]
-# ## Langkah 2 - Keping 1: TOOLS
-# Dua tool baca dan dua tool tulis dari katalog Perawatan. Tool yang sama bisa juga Anda tulis sendiri dengan `@tool`.
+# ## Langkah 2 - Tool
+# Empat tool dari katalog Operasi: tiga tool baca dan satu tool tulis. Tool dipilih di penjelajah lalu ditempel sebagai `import`.
 
 # %%
-TOOLS = [a.riwayat_work_order, a.aset_downtime_tertinggi, a.buat_work_order, a.tutup_work_order]
+from alat_data import (
+    laporan_harian,
+    cek_status_sumur,
+    hitung_water_cut,
+    catat_serah_terima,
+)
+
+TOOLS = [laporan_harian, cek_status_sumur, hitung_water_cut, catat_serah_terima]
 for t in TOOLS:
     print(f"   [{a.jenis_tool(t):<5}] {t.name}")
 
 # %% [markdown]
-# ## Langkah 3 - Keping 2: INSTRUKSI
-# `susun_prompt(use_case, gaya)` menggabungkan peran, aturan yang menyebut tool dengan namanya, dan gaya jawaban.
-# Gaya `ketat` hanya menjawab dari tool dan menolak yang di luar cakupan. Contoh 3 membandingkan gaya lainnya.
+# ## Langkah 3 - System prompt
+# System prompt adalah teks biasa yang diteruskan ke `system_prompt=`. Di bab ini teksnya disalin dari tab **Prompt** di penjelajah,
+# lalu boleh diubah sesuka Anda.
 
 # %%
-INSTRUKSI = susun_prompt("Perawatan", "ketat")
-print(INSTRUKSI)
+system_prompt = """Anda asisten pengawas shift di gathering station GS-SR1.
+Jawab dari laporan harian atau status sumur, dan pakai hitung_water_cut untuk water cut.
+Untuk pertanyaan tentang tanggal tertentu, SELALU panggil laporan_harian dulu.
+Catat serah terima hanya bila pengguna memintanya dengan jelas.
+Jangan mengarang angka. Jika tool tidak menemukan data, katakan terus terang. Jawab dalam Bahasa Indonesia, ringkas."""
+print(system_prompt)
 
 # %% [markdown]
-# ## Langkah 4 - Keping 3: PERSETUJUAN
-# Membuat work order boleh disetujui, diubah, atau ditolak. Menutup work order hanya boleh disetujui atau ditolak,
-# karena yang diperiksa reviewer adalah nomornya, bukan isinya. Kode memeriksa bahwa setiap tool tulis punya aturan.
+# ## Langkah 4 - Checkpointer
+# `InMemorySaver` menyimpan keadaan agen di memori. Tanpa checkpointer, agen tidak ingat percakapan sebelumnya dan tidak bisa berhenti
+# menunggu keputusan manusia lalu melanjutkan.
 
 # %%
-PERSETUJUAN = {
-    "buat_work_order": {"allowed_decisions": ["approve", "edit", "reject"]},
-    "tutup_work_order": {"allowed_decisions": ["approve", "reject"]},
-}
-tanpa_aturan = [t.name for t in TOOLS if a.jenis_tool(t) == "tulis" and t.name not in PERSETUJUAN]
-print(f"   Tool tulis tanpa aturan persetujuan: {tanpa_aturan or 'tidak ada'} -> {'LOLOS' if not tanpa_aturan else 'GAGAL'}")
+checkpointer = InMemorySaver()
 
 # %% [markdown]
 # ## Langkah 5 - Merakit agen
-# Tiga keping masuk ke `create_agent()`. `HumanInTheLoopMiddleware` mengubah PERSETUJUAN menjadi interrupt,
-# dan `InMemorySaver` menyimpan keadaan agen selama menunggu keputusan (lihat bab 6).
+# Semuanya masuk ke `create_agent(...)`. Parameter `interrupt_on` pada `HumanInTheLoopMiddleware` adalah kamus dari nama tool ke
+# keputusan yang diizinkan reviewer: `approve` (setuju), `edit` (ubah argumen), dan `reject` (tolak). Di sini hanya `catat_serah_terima`
+# yang menunggu persetujuan, dan reviewer tidak boleh mengubah isinya. Tool yang tidak ada di kamus berjalan bebas.
 
 # %%
 agen = create_agent(
     get_chat_model(),
     tools=TOOLS,
-    system_prompt=INSTRUKSI,
-    middleware=[HumanInTheLoopMiddleware(interrupt_on=PERSETUJUAN)],
-    checkpointer=InMemorySaver(),
-    context_schema=KonteksPengguna,
+    system_prompt=system_prompt,
+    middleware=[
+        HumanInTheLoopMiddleware(
+            interrupt_on={
+                "catat_serah_terima": {"allowed_decisions": ["approve", "reject"]},
+            }
+        )
+    ],
+    checkpointer=checkpointer,
 )
-konteks = k.konteks_untuk("engineer")
-print("   Agen siap.")
-
-# %% [markdown]
-# ## Langkah 6 - Pertanyaan baca: tidak ada persetujuan
-# Tool baca berjalan bebas, jadi reviewer tidak pernah ditanya.
-
-# %%
-pertanyaan = PERTANYAAN["Perawatan"]["baca"][0]
-print(f"   Pengguna: {pertanyaan}")
-hasil_baca = k.tanya(agen, pertanyaan, "rakit-baca", konteks)
-print(f"   Tool dipanggil : {hasil_baca.tool}")
-print(f"   Keputusan      : {hasil_baca.keputusan or 'tidak ada (tidak ada tool tulis)'}")
-print(f"   Jawaban agen   : {hasil_baca.jawaban[:150].replace(chr(10), ' ')}...")
-
-# %% [markdown]
-# ## Langkah 7 - Pertanyaan tulis: reviewer menyetujui
-# `k.tanya()` menjalankan agen sampai selesai dan menjawab setiap permintaan persetujuan dengan fungsi `reviewer`.
-# Di aplikasi, reviewer-nya adalah Anda lewat formulir.
-
-# %%
-def setuju(permintaan: dict, boleh: list[str]) -> dict:
-    print(f"   Reviewer menerima usulan {permintaan['name']} {permintaan['args']}")
-    print(f"   Pilihan yang diizinkan: {', '.join(boleh)} -> approve")
-    return {"type": "approve"}
-
-
-pertanyaan = PERTANYAAN["Perawatan"]["tulis"][0]
-print(f"   Pengguna: {pertanyaan}")
-sebelum = len(a.CATATAN_TINDAKAN)
-hasil_setuju = k.tanya(agen, pertanyaan, "rakit-setuju", konteks, setuju)
-print(f"   Tool dipanggil : {hasil_setuju.tool}")
-bertambah = len(a.CATATAN_TINDAKAN) - sebelum
-print(f"   Dicatat di kode: {[c['nomor'] for c in a.CATATAN_TINDAKAN[sebelum:]]} -> {'LOLOS' if bertambah == 1 else 'GAGAL'}")
-
-# %% [markdown]
-# ## Langkah 8 - Reviewer mengubah argumen
-# Pada keputusan `edit`, tool berjalan dengan argumen baru dari reviewer. Di sini prioritas diubah menjadi `tinggi`.
-# Kode memeriksa catatan terakhir, bukan jawaban agen.
-
-# %%
-def ubah_prioritas(permintaan: dict, boleh: list[str]) -> dict:
-    print(f"   Reviewer mengubah prioritas {permintaan['args'].get('prioritas')} -> tinggi")
-    args_baru = {**permintaan["args"], "prioritas": "tinggi"}
-    return {"type": "edit", "edited_action": {"name": permintaan["name"], "args": args_baru}}
-
-
-hasil_ubah = k.tanya(agen, pertanyaan, "rakit-ubah", konteks, ubah_prioritas)
-terakhir = a.CATATAN_TINDAKAN[-1]
-print(f"   Keputusan      : {hasil_ubah.keputusan}")
-print(f"   Dicatat di kode: {terakhir['nomor']} prioritas {terakhir.get('prioritas')} -> {'LOLOS' if terakhir.get('prioritas') == 'tinggi' else 'GAGAL'}")
-
-# %% [markdown]
-# ## Langkah 9 - Reviewer menolak
-# Tool tidak berjalan dan agen menerima alasan penolakan. Tidak ada catatan baru.
-
-# %%
-sebelum = len(a.CATATAN_TINDAKAN)
-hasil_tolak = k.tanya(agen, pertanyaan, "rakit-tolak", konteks, k.keputusan_tolak)
-print(f"   Keputusan      : {hasil_tolak.keputusan}")
-print(f"   Dicatat di kode: bertambah {len(a.CATATAN_TINDAKAN) - sebelum} -> {'LOLOS' if len(a.CATATAN_TINDAKAN) == sebelum else 'GAGAL'}")
-print(f"   Jawaban agen   : {hasil_tolak.jawaban[:150].replace(chr(10), ' ')}...")
+print(f"Agen siap. Tool terpasang: {k.nama_tool_agen(agen)}")
 
 # %% [markdown]
 # ## Ide Utama
-# - Agen mini project = tiga keping: TOOLS, INSTRUKSI, dan PERSETUJUAN, lalu `create_agent()`
-# - Setiap tool tulis harus punya aturan persetujuan; kode bisa memeriksanya
-# - Reviewer berskrip (`k.tanya`) menguji jalur setuju, ubah, dan tolak tanpa membuka aplikasi
-# - Periksa efek nyata di data (`CATATAN_TINDAKAN`), jangan hanya percaya kalimat jawaban
+# - Agen = `create_agent(model, tools, system_prompt, middleware, checkpointer)`: semua yang dibutuhkan ada dalam satu panggilan
+# - `system_prompt` hanyalah teks; yang Anda tulis di sana adalah imbauan bagi model
+# - `interrupt_on` menentukan tool mana yang berhenti menunggu manusia, dan keputusan apa yang diizinkan
+# - Checkpointer menyimpan keadaan agen di setiap langkah, sehingga percakapan dan permintaan persetujuan yang tertunda tidak hilang

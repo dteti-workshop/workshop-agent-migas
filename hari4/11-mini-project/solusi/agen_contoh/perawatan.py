@@ -6,9 +6,7 @@ Membuat work order adalah tindakan tulis: boleh disetujui, diubah, atau ditolak.
 from langchain.agents import create_agent
 from langchain.agents.middleware import HumanInTheLoopMiddleware
 
-from migas_shared.rag_tools import KonteksPengguna, cari_dokumen
-
-from alat_data import buat_work_order, riwayat_work_order, statistik_kegagalan
+from alat_data import buat_work_order, cari_dokumen_sop, riwayat_work_order, statistik_kegagalan
 
 JUDUL = "Asisten Perencana Pemeliharaan"
 PENGANTAR = "Membaca riwayat work order dan statistik kegagalan, mencari SOP, lalu mengusulkan work order baru yang menunggu persetujuan Anda."
@@ -18,10 +16,10 @@ CONTOH_PERTANYAAN = [
     "Buat work order prioritas sedang untuk memeriksa level controller V-SR1-101.",
 ]
 
-TOOLS = [riwayat_work_order, statistik_kegagalan, cari_dokumen, buat_work_order]
+TOOLS = [riwayat_work_order, statistik_kegagalan, cari_dokumen_sop, buat_work_order]
 
 INSTRUKSI = """Anda asisten perencana pemeliharaan lapangan migas.
-Untuk riwayat dan statistik, pakai riwayat_work_order dan statistik_kegagalan. Untuk prosedur, pakai cari_dokumen
+Untuk riwayat dan statistik, pakai riwayat_work_order dan statistik_kegagalan. Untuk prosedur, pakai cari_dokumen_sop
 dan beri sitasi [DOC_ID bagian]. Buat work order HANYA bila pengguna memintanya secara jelas, dan dalam kasus itu langsung panggil buat_work_order.
 Jangan mengarang nomor work order atau angka downtime. Jika data tidak ada, katakan terus terang.
 Jawab dalam Bahasa Indonesia, ringkas."""
@@ -50,5 +48,4 @@ def buat_agen(model, checkpointer):
         system_prompt=INSTRUKSI,
         middleware=[HumanInTheLoopMiddleware(interrupt_on=PERSETUJUAN)],
         checkpointer=checkpointer,
-        context_schema=KonteksPengguna,
     )

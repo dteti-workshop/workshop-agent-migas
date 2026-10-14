@@ -84,7 +84,7 @@ check("Konfigurasi .env untuk hari 3-4", _env_hari34, "Isi ONLINE_API_KEY, ONLIN
 
 def _data():
     need = ["data/raw/work_orders.csv", "data/raw/hse_incidents.csv", "data/docs/sop/SOP-HSE-001_rev3_H2S.md",
-            "data/docs/manual/MAN-VSD-FD500.pdf", "data/eval/rag_golden_set.jsonl"]
+            "data/docs/manual/MAN-VSD-FD500.pdf", "data/eval/rag_golden_set.jsonl", "data/field/sumur.csv"]
     missing = [n for n in need if not (ROOT / n).exists()]
     if missing:
         raise FileNotFoundError(missing)

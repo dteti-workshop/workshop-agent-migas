@@ -30,7 +30,9 @@ migas_shared/      paket bersama hari 3-4: LLM lewat LangChain, embedding, pipel
 data/
   raw/             work_orders.csv (400 WO teks bebas), hse_incidents.csv (120 narasi), daily_reports/
   docs/            korpus RAG: sop/, manual/ (PDF), laporan/, investigasi/ (rahasia), glosarium/
+  docs_bab11/      18 dokumen tambahan khusus bab 11 (sop/, manual/, laporan/, investigasi/); indeks terpisah dari data/docs
   eval/            ground truth & golden set (untuk mengukur akurasi)
+  field/           data sumur untuk bab 11: sumur.csv (196 sumur, status per 31 Juli 2026), produksi_sumur_2026-07.csv (produksi harian semua sumur)
   contoh_upload/   file contoh untuk latihan upload (SOP baru, revisi SOP, laporan shift)
 hari1/             satu file per unit (unit2 sampai unit7), app_asisten_wo.py (Unit 8: chat + upload file)
 hari2/             rag_pipeline.py (pustaka RAG), satu file per unit (unit1 sampai unit6), app_doc_qa.py (Unit 7: chat + lampiran session + upload knowledge)
@@ -90,7 +92,7 @@ latihan_N.ipynb  starter yang sama dalam bentuk notebook
 latihan.md       petunjuk singkat latihan
 ```
 
-Cara mengerjakan latihan hari 3 dan 4 sama seperti hari 1 dan 2: isi baris `... = None  # TODO` pada `latihan_1.py` (dan seterusnya) dengan kode dari bagian **Kode Jawaban Latihan** di PDF bab. Bab 11 adalah mini project berkelompok tanpa starter. Skrip contoh dijalankan dari **root repo**, misalnya `python hari3/03-agen/code/01_basic_agent.py`.
+Cara mengerjakan latihan hari 3 dan 4 sama seperti hari 1 dan 2: isi baris `... = None  # TODO` pada `latihan_1.py` (dan seterusnya) dengan kode dari bagian **Kode Jawaban Latihan** di PDF bab. Bab 11 adalah mini project berkelompok: TODO-nya (`TODO(M.1)` sampai `TODO(M.3)`) ada di sel notebook bab itu, dan kuncinya di PDF bab 11. Skrip contoh dijalankan dari **root repo**, misalnya `python hari3/03-agen/code/01_basic_agent.py`.
 
 ## Aturan pemakaian API key bersama
 
