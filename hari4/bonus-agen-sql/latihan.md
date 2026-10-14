@@ -29,7 +29,7 @@ Berlatih membangun agen SQL untuk database **baru**: beri ia tool skema, jaga ag
 | TODO | Yang Anda isi |
 |---|---|
 | `TODO(BQ.1)` | kembalikan kamus kebenaran dari lima query SQL: jumlah_sumur, total_minyak_barel, sumur_air_terbanyak, pendapatan_minyak_0610, dan baris_produksi |
-| `TODO(BQ.2)` | buat agen dengan tiga tool SQL, system prompt PROMPT_SISTEM_SQL + " Beri jawaban akhir sebagai JawabanQuery.", response_format=JawabanQuery, dan ModelCallLimitMiddleware(run_limit=15, exit_behavior="end") |
+| `TODO(BQ.2)` | buat agen dengan tiga tool SQL, system prompt PROMPT_SISTEM_SQL (tanpa kalimat tambahan), response_format=JawabanQuery, dan ModelCallLimitMiddleware(run_limit=15, exit_behavior="end") |
 | `TODO(BQ.3)` | bandingkan jawaban agen dengan nilai diharapkan setelah keduanya dinormalkan dengan hanya_alfanumerik |
 
 **Coba dengan**:

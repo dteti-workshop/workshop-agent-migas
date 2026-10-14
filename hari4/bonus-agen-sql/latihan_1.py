@@ -81,7 +81,7 @@ db_path = buat_database_produksi(Path(folder_kerja.name) / "produksi.db")
 benar = kebenaran(db_path)
 
 daftar_tabel, deskripsikan_tabel, jalankan_query = bangun_alat_sql(db_path)
-# TODO(BQ.2): buat agen dengan tiga tool SQL, system prompt PROMPT_SISTEM_SQL + " Beri jawaban akhir sebagai JawabanQuery.", response_format=JawabanQuery, dan ModelCallLimitMiddleware(run_limit=15, exit_behavior="end")
+# TODO(BQ.2): buat agen dengan tiga tool SQL, system prompt PROMPT_SISTEM_SQL (tanpa kalimat tambahan), response_format=JawabanQuery, dan ModelCallLimitMiddleware(run_limit=15, exit_behavior="end")
 agent = None  # TODO: ganti dengan implementasi Anda
 
 # %% [markdown]

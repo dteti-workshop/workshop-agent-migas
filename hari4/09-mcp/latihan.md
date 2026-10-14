@@ -97,7 +97,7 @@ Berlatih menghubungkan agen ke layanan eksternal lewat Model Context Protocol (M
 | `TODO(B9.11)` | buat MultiServerMCPClient untuk server stdio "work_order" yang menjalankan PATH_SERVER dengan sys.executable |
 | `TODO(B9.12)` | ambil tool server dengan jalankan(client.get_tools()), lalu buat kamus tool_per_nama |
 | `TODO(B9.13)` | panggil daftar_wo_terbuka('Kenanga') langsung (ainvoke lewat jalankan), lalu ok = hasilnya memuat WO-26-12611; tambahkan ke lolos |
-| `TODO(B9.14)` | panggil daftar_wo_terbuka dengan area 'Atlantis'; ok bernilai True hanya bila ToolException muncul |
+| `TODO(B9.14)` | panggil daftar_wo_terbuka dengan area 'Atlantis'; ok bernilai True bila hasilnya memuat 'tidak dikenal' (error server dikembalikan sebagai teks) atau ToolException muncul |
 | `TODO(B9.15)` | buat agen dari model dan tool server dengan system prompt asisten pemeliharaan (pakai tool, jangan menebak) |
 
 **Kriteria keberhasilan**:

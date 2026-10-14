@@ -77,7 +77,7 @@ print(f"   {'LOLOS' if ok else 'GAGAL'}  hitung_kerugian_downtime(12 jam, 100 bo
 # Area yang tidak dikenal harus ditolak dengan error yang jelas.
 
 # %%
-# TODO(B9.14): panggil daftar_wo_terbuka dengan area 'Atlantis'; ok bernilai True hanya bila ToolException muncul
+# TODO(B9.14): panggil daftar_wo_terbuka dengan area 'Atlantis'; ok bernilai True bila hasilnya memuat 'tidak dikenal' (error server dikembalikan sebagai teks) atau ToolException muncul
 ok = False  # TODO: ganti dengan implementasi Anda
 lolos += ok
 print(f"   {'LOLOS' if ok else 'GAGAL'}  area tidak dikenal ditolak dengan error")
