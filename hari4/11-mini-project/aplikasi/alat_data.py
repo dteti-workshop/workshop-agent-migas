@@ -218,13 +218,13 @@ def riwayat_work_order(asset_id: str, maks: int = 5) -> str:
 
     Args:
         asset_id: Kode aset, contoh "SR-020" atau "V-SR1-101".
-        maks: Jumlah work order terbaru yang ditampilkan (1 sampai 10).
+        maks: Jumlah work order terbaru yang ditampilkan (minimal 1, tanpa batas atas). Isi 1000 untuk menampilkan seluruh riwayat.
     """
     baris = _work_order()
     baris = baris[baris["asset_id"].str.upper() == asset_id.strip().upper()]
     if baris.empty:
         return f"Tidak ada work order untuk aset {asset_id}."
-    tampil = baris.head(max(1, min(maks, 10)))
+    tampil = baris.head(max(1, min(maks, len(baris))))
     teks = [f"{asset_id.upper()}: {len(baris)} work order, total downtime {baris['downtime_hours'].sum():.1f} jam. Terbaru:"]
     for _, r in tampil.iterrows():
         teks.append(f"- {r['wo_id']} ({r['tanggal']}): {r['failure_category']}, komponen {r['component']}, "
@@ -272,12 +272,12 @@ def aset_downtime_tertinggi(maks: int = 5) -> str:
     """Tampilkan aset dengan total downtime tertinggi dari seluruh work order, beserta jumlah work order dan tipe peralatannya.
 
     Args:
-        maks: Jumlah aset teratas yang ditampilkan (1 sampai 10).
+        maks: Jumlah aset teratas yang ditampilkan (minimal 1, tanpa batas atas). Isi 1000 untuk menampilkan semua aset.
     """
     baris = _work_order()
     per_aset = (baris.groupby("asset_id").agg(jumlah=("wo_id", "count"), jam=("downtime_hours", "sum"),
                                               tipe=("equipment_type", "first"))
-                .sort_values("jam", ascending=False).head(max(1, min(maks, 10))))
+                .sort_values("jam", ascending=False).head(max(1, maks)))
     teks = [f"{len(per_aset)} aset dengan downtime tertinggi:"]
     for aset, r in per_aset.iterrows():
         teks.append(f"- {aset} ({r['tipe']}): {r['jam']:.0f} jam dari {int(r['jumlah'])} work order")
@@ -312,7 +312,7 @@ def cari_insiden(lokasi: str | None = None, bahaya: Bahaya | None = None, tingka
         lokasi: Sebagian nama lokasi, contoh "GS-SR1" atau "Workshop".
         bahaya: Jenis bahaya (pilihan terbatas).
         tingkat: Tingkat keparahan (pilihan terbatas).
-        maks: Jumlah insiden terbaru yang ditampilkan (1 sampai 10).
+        maks: Jumlah insiden terbaru yang ditampilkan (minimal 1, tanpa batas atas). Isi 1000 untuk menampilkan semua insiden yang cocok.
     """
     baris = _insiden()
     if lokasi:
@@ -324,7 +324,7 @@ def cari_insiden(lokasi: str | None = None, bahaya: Bahaya | None = None, tingka
     if baris.empty:
         return "Tidak ada insiden yang cocok dengan filter tersebut."
     teks = [f"{len(baris)} insiden cocok. Terbaru:"]
-    for _, r in baris.head(max(1, min(maks, 10))).iterrows():
+    for _, r in baris.head(max(1, maks)).iterrows():
         teks.append(f"- {r['incident_id']} ({r['tanggal']}, {r['lokasi']}): {r['incident_type']}, bahaya {r['hazard']}, "
                     f"tingkat {r['severity']}. {r['narasi'][:150]}")
     return "\n".join(teks)
@@ -440,13 +440,13 @@ def hari_berkejadian(maks: int = 10) -> str:
     """Daftar hari pada Juli 2026 yang punya kejadian khusus di laporan harian GS-SR1, beserta deferred (produksi tertunda) pada hari itu.
 
     Args:
-        maks: Jumlah hari yang ditampilkan (1 sampai 15).
+        maks: Jumlah hari yang ditampilkan (minimal 1, tanpa batas atas). Isi 1000 untuk menampilkan semua hari berkejadian.
     """
     baris = _harian().dropna(subset=["event"])
     if baris.empty:
         return "Tidak ada hari berkejadian pada Juli 2026."
-    teks = [f"{len(baris)} hari berkejadian. Ditampilkan {min(len(baris), max(1, min(maks, 15)))} pertama:"]
-    for _, r in baris.head(max(1, min(maks, 15))).iterrows():
+    teks = [f"{len(baris)} hari berkejadian. Ditampilkan {min(len(baris), max(1, maks))} pertama:"]
+    for _, r in baris.head(max(1, maks)).iterrows():
         teks.append(f"- {r['tanggal']}: {r['event'][:110]} (deferred {r['deferred_bbl']} bbl)")
     return "\n".join(teks)
 
