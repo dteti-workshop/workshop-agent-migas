@@ -233,6 +233,18 @@ def _riwayat_work_order():
     return _svg(isi, "Perawatan")
 
 
+def _cari_work_order():
+    isi = _tabel(26, 34, 3, 5, 150, 120, KUNING)
+    for j in (1, 3):  # baris yang cocok dengan filter
+        isi += f'<rect x="26" y="{34 + 24 * j}" width="150" height="24" fill="{HIJAU}" stroke="{NAVY}" stroke-width="1.2"/>'
+    for i, nama in enumerate(["WO", "aset", "jam"]):
+        isi += _t(51 + 50 * i, 51, nama, 11)
+    isi += _r(196, 36, 74, 20, PUTIH, NAVY, 5, 2) + _t(233, 50, "kategori", 11)
+    isi += _r(196, 62, 74, 20, PUTIH, NAVY, 5, 2) + _t(233, 76, "tanggal", 11)
+    isi += _kaca_pembesar(222, 126, 1.0) + _t(50, 176, "CSV", 13, ABU_T)
+    return _svg(isi, "Perawatan")
+
+
 def _statistik_kegagalan():
     isi = _c(110, 100, 62, PUTIH, NAVY, 3)
     isi += _p("M110 100 L110 38 A62 62 0 0 1 164 131 Z", BIRU, NAVY, 2.5)
@@ -365,6 +377,7 @@ _GAMBAR = {
     "hitung_water_cut": _hitung_water_cut,
     "catat_serah_terima": _catat_serah_terima,
     "riwayat_work_order": _riwayat_work_order,
+    "cari_work_order": _cari_work_order,
     "statistik_kegagalan": _statistik_kegagalan,
     "aset_downtime_tertinggi": _aset_downtime_tertinggi,
     "buat_work_order": _buat_work_order,

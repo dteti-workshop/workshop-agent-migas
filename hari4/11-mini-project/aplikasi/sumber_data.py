@@ -64,6 +64,8 @@ SUMBER = {
     "hari_berkejadian": {"jenis": "csv", "tabel": "harian", "kolom": ["tanggal", "event", "deferred_bbl"]},
     "riwayat_work_order": {"jenis": "csv", "tabel": "work_order",
                            "kolom": ["wo_id", "tanggal", "asset_id", "failure_category", "component", "action_category", "downtime_hours"]},
+    "cari_work_order": {"jenis": "csv", "tabel": "work_order",
+                        "kolom": ["wo_id", "tanggal", "asset_id", "equipment_type", "area", "failure_category", "component", "action_category", "downtime_hours"]},
     "statistik_kegagalan": {"jenis": "csv", "tabel": "work_order", "kolom": ["equipment_type", "failure_category", "downtime_hours"]},
     "aset_downtime_tertinggi": {"jenis": "csv", "tabel": "work_order", "kolom": ["asset_id", "equipment_type", "wo_id", "downtime_hours"]},
     "tutup_work_order": {"jenis": "csv", "tabel": "work_order", "kolom": ["wo_id"],

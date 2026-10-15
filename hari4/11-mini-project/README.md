@@ -2,7 +2,7 @@
 
 Di bab terakhir ini Anda tidak belajar fitur baru. Anda memakai semua yang sudah dipelajari (tool, agen, memori, streaming, persetujuan manusia, guardrails, dan pencarian dokumen) untuk menyusun **agen sederhana, secara mandiri atau berkelompok**.
 
-Kami menyediakan komponennya, dan semuanya dikerjakan dari satu notebook. Ada **katalog 24 tool** untuk empat use case (Operasi, Perawatan, HSE, Engineering), **bank variasi prompt**, dan **tiga aplikasi Streamlit**: **Penjelajah** untuk mengenal tool dan prompt, **Aplikasi agen** untuk mengobrol dengan agen Anda (lengkap dengan jejak kerja agen dan formulir persetujuan), dan **Panduan uji** berisi pertanyaan beserta kriteria berhasil. Tugas Anda (atau kelompok Anda): memilih use case, lalu menyusun satu agen dari tiga komponen: **tool**, **prompt**, dan **interrupt** (persetujuan manusia). Agen ditulis di sel notebook, tanpa mengedit file `.py`.
+Kami menyediakan komponennya, dan semuanya dikerjakan dari satu notebook. Ada **katalog 25 tool** untuk empat use case (Operasi, Perawatan, HSE, Engineering), **bank variasi prompt**, dan **tiga aplikasi Streamlit**: **Penjelajah** untuk mengenal tool dan prompt, **Aplikasi agen** untuk mengobrol dengan agen Anda (lengkap dengan jejak kerja agen dan formulir persetujuan), dan **Panduan uji** berisi pertanyaan beserta kriteria berhasil. Tugas Anda (atau kelompok Anda): memilih use case, lalu menyusun satu agen dari tiga komponen: **tool**, **prompt**, dan **interrupt** (persetujuan manusia). Agen ditulis di sel notebook, tanpa mengedit file `.py`.
 
 ## Latar Belakang: PT Minyak Sejahtera
 
@@ -14,7 +14,7 @@ Semua data di bab ini berasal dari **PT Minyak Sejahtera**, perusahaan migas fik
 | Kenanga | GS-KN1, GS-KN2 | 86 |
 | Melati | GS-ML1 | 48 |
 
-Semua sumur diangkat dengan pompa: 89 ESP, 86 SRP, dan 21 PCP. Per 31 Juli 2026, 168 sumur berproduksi, 11 shut-in, 11 menunggu pulling, dan 6 sedang workover. Data operasinya mencakup **Juli 2026**: produksi harian setiap sumur, laporan harian operasi GS-SR1 (hanya area Seruni yang punya laporan stasiun), 400 work order pemeliharaan, 120 laporan insiden HSE, dan 31 dokumen (SOP, manual, laporan bulanan, lessons learned, dan laporan investigasi).
+Semua sumur diangkat dengan pompa: 89 ESP, 86 SRP, dan 21 PCP. Per 31 Juli 2026, 168 sumur berproduksi, 11 shut-in, 11 menunggu pulling, dan 6 sedang workover. Data operasinya terdiri dari: produksi harian setiap sumur dan laporan harian operasi GS-SR1 (hanya area Seruni yang punya laporan stasiun) untuk **Juli 2026**; 400 work order pemeliharaan dan 120 laporan insiden HSE untuk **Januari sampai September 2026**; serta 31 dokumen (SOP, manual, laporan bulanan, lessons learned, dan laporan investigasi).
 
 Empat peran di perusahaan ini punya kebutuhan data yang berbeda: pengawas shift operasi, perencana pemeliharaan, HSE officer, dan engineer lapangan. Keempatnya menjadi use case bab ini. Seluruh nama, angka, dan kejadian dibuat untuk pelatihan dan tidak mewakili perusahaan atau lapangan nyata.
 
@@ -114,9 +114,9 @@ Katalog di bab ini sudah menyiapkan data dan tool untuk empat use case. Tool tul
 | Use case | Tool baca | Tool tulis (perlu interrupt) |
 |----------|-----------|------------------------------|
 | **Operasi**: pengawas shift GS-SR1 | `laporan_harian`, `ringkasan_produksi_bulanan`, `bandingkan_produksi`, `hari_berkejadian`, `cek_status_sumur`, `daftar_sumur`, `produksi_sumur`, `riwayat_work_order`, `cari_dokumen_sop`, `hitung_water_cut` | `catat_serah_terima` |
-| **Perawatan**: perencana pemeliharaan | `riwayat_work_order`, `statistik_kegagalan`, `aset_downtime_tertinggi`, `cek_status_sumur`, `daftar_sumur`, `produksi_sumur`, `cari_dokumen_sop`, `cari_dokumen_manual` | `buat_work_order`, `tutup_work_order` |
+| **Perawatan**: perencana pemeliharaan | `riwayat_work_order`, `cari_work_order`, `statistik_kegagalan`, `aset_downtime_tertinggi`, `cek_status_sumur`, `daftar_sumur`, `produksi_sumur`, `cari_dokumen_sop`, `cari_dokumen_manual` | `buat_work_order`, `tutup_work_order` |
 | **HSE**: petugas HSE | `cari_insiden`, `ringkasan_insiden`, `cek_status_sumur`, `riwayat_work_order`, `cari_dokumen_sop`, `cari_dokumen_laporan`, `cari_dokumen_investigasi` | `usulkan_tindakan_korektif`, `kirim_notifikasi_hse` |
-| **Engineering**: engineer lapangan | `cari_dokumen_sop`, `cari_dokumen_manual`, `cari_dokumen_laporan`, `konversi_satuan`, `hitung_water_cut`, `cek_status_sumur`, `daftar_sumur`, `produksi_sumur`, `riwayat_work_order` | `ubah_setpoint_vsd` |
+| **Engineering**: engineer lapangan | `cari_dokumen_sop`, `cari_dokumen_manual`, `cari_dokumen_laporan`, `konversi_satuan`, `hitung_water_cut`, `cek_status_sumur`, `daftar_sumur`, `produksi_sumur`, `riwayat_work_order`, `cari_work_order` | `ubah_setpoint_vsd` |
 
 Data sumur untuk ketiga tool sumur (`cek_status_sumur`, `daftar_sumur`, `produksi_sumur`) dan `ubah_setpoint_vsd` ada di folder `data/field/`: `sumur.csv` memuat 196 sumur Seruni, Kenanga, dan Melati dengan status per 31 Juli 2026, dan `produksi_sumur_2026-07.csv` memuat produksi harian tiap sumur selama Juli 2026. Jumlah produksi semua sumur Seruni pada satu hari sama dengan laporan harian GS-SR1, jadi hasil `laporan_harian` dan `produksi_sumur` bisa saling dicocokkan. Untuk empat tool pencarian dokumen, korpus dokumen hari 2 sampai 4 (`data/docs`, 13 dokumen) ditambah 18 dokumen khusus bab ini di `data/docs_bab11` (SOP keselamatan dan operasi, manual ESP, pumping unit, dan level control valve, laporan bulanan Kenanga dan Melati, lessons learned, dan satu laporan investigasi), sehingga ada 31 dokumen. Dokumen tambahan dipisah supaya bab lain tidak terpengaruh, dan indeksnya dibangun terpisah pada pencarian pertama (sekitar setengah menit). Semua datanya fiktif.
 
@@ -172,7 +172,7 @@ riwayat_work_order.invoke({"asset_id": "SR-020", "maks": 2})   # panggil langsun
 # Dua komponen pertama agen adalah tool dan prompt. Sebelum memilihnya, kenali dulu bahannya lewat aplikasi Streamlit
 # **Penjelajah** (`aplikasi/penjelajah.py`):
 #
-# - tab **Tool**: 24 tool dengan ilustrasi, parameter, hasil, contoh pemakaian, dan formulir untuk memanggilnya sendiri
+# - tab **Tool**: 25 tool dengan ilustrasi, parameter, hasil, contoh pemakaian, dan formulir untuk memanggilnya sendiri
 #   (parameter pilihan terbatas berupa dropdown) dan tab **Sumber data**: tabel CSV atau dokumen asli beserta chunk-nya
 # - tab **Prompt**: memilih use case, aturan tool, dan gaya jawaban, lalu menekan **Bangun prompt**
 # - tab **Pilih tool**: mencentang tool dan mendapatkan snippet kode `TOOLS` untuk disalin
@@ -576,7 +576,7 @@ else:
 Keluaran di bawah berasal dari **solusi** (semua TODO terisi: agen Perawatan dengan tujuh tool). Pada kerangka yang belum diisi, sel `Periksa` mencetak daftar TODO yang masih kosong.
 
 ```text
-Tool terpasang pada agen: ['riwayat_work_order', 'statistik_kegagalan', 'aset_downtime_tertinggi', 'cek_status_sumur', 'daftar_sumur', 'produksi_sumur', 'cari_dokumen_sop', 'cari_dokumen_manual', 'buat_work_order', 'tutup_work_order']
+Tool terpasang pada agen: ['riwayat_work_order', 'cari_work_order', 'statistik_kegagalan', 'aset_downtime_tertinggi', 'cek_status_sumur', 'daftar_sumur', 'produksi_sumur', 'cari_dokumen_sop', 'cari_dokumen_manual', 'buat_work_order', 'tutup_work_order']
 Siap didaftarkan.
 
 Agen terdaftar sebagai 'Agen Saya #1'. Lanjut ke Contoh 4 untuk mengobrol dengannya.

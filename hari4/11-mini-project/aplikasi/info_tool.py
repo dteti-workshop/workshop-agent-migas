@@ -85,6 +85,13 @@ INFO = {
         "contoh": {"asset_id": "SR-020", "maks": 3},
         "tanya": ["Bagaimana riwayat work order sumur SR-020?"],
     },
+    "cari_work_order": {
+        "fungsi": "Mencari work order di seluruh aset menurut kategori kegagalan, komponen, tipe peralatan, area, dan rentang tanggal. Cocok untuk pertanyaan yang tidak menyebut satu aset tertentu.",
+        "sumber": "Dua file CSV work order (`data/raw/work_orders.csv` digabung dengan hasil ekstraksi terstruktur): 400 work order, Januari sampai September 2026.",
+        "hasil": "Baris pembuka (jumlah work order yang cocok, total downtime, jumlah yang ditampilkan) diikuti satu baris per work order terbaru. Komponen yang tidak dikenal menghasilkan daftar komponen yang ada.",
+        "contoh": {"kategori": "Electrical", "dari": "2026-07-01", "sampai": "2026-07-31", "maks": 5},
+        "tanya": ["Work order kelistrikan apa saja yang terjadi pada Juli 2026?", "Berapa kali kerusakan VSD di area Seruni?"],
+    },
     "statistik_kegagalan": {
         "fungsi": "Menghitung jumlah work order dan total downtime per kategori kegagalan, untuk satu tipe peralatan atau semuanya.",
         "sumber": "File CSV work order.",

@@ -5,7 +5,7 @@
 # Dua komponen pertama agen adalah tool dan prompt. Sebelum memilihnya, kenali dulu bahannya lewat aplikasi Streamlit
 # **Penjelajah** (`aplikasi/penjelajah.py`):
 #
-# - tab **Tool**: 24 tool dengan ilustrasi, parameter, hasil, contoh pemakaian, dan formulir untuk memanggilnya sendiri
+# - tab **Tool**: 25 tool dengan ilustrasi, parameter, hasil, contoh pemakaian, dan formulir untuk memanggilnya sendiri
 #   (parameter pilihan terbatas berupa dropdown) dan tab **Sumber data**: tabel CSV atau dokumen asli beserta chunk-nya
 # - tab **Prompt**: memilih use case, aturan tool, dan gaya jawaban, lalu menekan **Bangun prompt**
 # - tab **Pilih tool**: mencentang tool dan mendapatkan snippet kode `TOOLS` untuk disalin

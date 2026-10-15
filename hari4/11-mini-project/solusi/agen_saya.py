@@ -39,6 +39,7 @@ import kerangka as k
 # TODO(M.1): tempel baris `from alat_data import (...)` dan `TOOLS = [...]` dari penjelajah
 from alat_data import (
     riwayat_work_order,
+    cari_work_order,
     statistik_kegagalan,
     aset_downtime_tertinggi,
     cek_status_sumur,
@@ -52,6 +53,7 @@ from alat_data import (
 
 TOOLS = [
     riwayat_work_order,
+    cari_work_order,
     statistik_kegagalan,
     aset_downtime_tertinggi,
     cek_status_sumur,
@@ -89,7 +91,7 @@ agen = create_agent(
     model,
     tools=TOOLS,
     system_prompt="""Anda asisten perencana pemeliharaan lapangan migas.
-Untuk riwayat dan statistik, pakai riwayat_work_order, statistik_kegagalan, dan aset_downtime_tertinggi.
+Untuk riwayat satu aset, pakai riwayat_work_order. Untuk mencari work order lintas aset menurut kategori, komponen, tipe peralatan, area, atau tanggal, pakai cari_work_order. Untuk statistik dan peringkat, pakai statistik_kegagalan dan aset_downtime_tertinggi.
 Untuk prosedur dan manual, pakai cari_dokumen_sop dan cari_dokumen_manual, lalu beri sitasi [DOC_ID bagian].
 Untuk status, daftar, dan produksi harian sumur, pakai cek_status_sumur, daftar_sumur, dan produksi_sumur. Kode sumur sama dengan kode aset pada work order; pakai produksi_sumur untuk menilai dampak kegagalan terhadap produksi.
 Buat atau tutup work order HANYA bila pengguna memintanya secara jelas, dan dalam kasus itu langsung panggil tool-nya.

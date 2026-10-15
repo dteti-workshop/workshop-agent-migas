@@ -15,6 +15,7 @@ Tool BACA mengembalikan teks ringkas. Tool TULIS (nama-namanya di TULIS) hanya m
 di memori. Tidak ada sistem nyata yang diubah, sehingga aman dicoba. Agen yang memakai tool tulis sebaiknya dipasangi
 persetujuan manusia (lihat solusi/agen_contoh/perawatan.py).
 """
+import re
 import threading
 from functools import lru_cache
 from typing import Literal
@@ -31,6 +32,8 @@ CATATAN_TINDAKAN: list[dict] = []
 # Pilihan terbatas ditulis sebagai Literal, sehingga skema argumen tool memuat daftar nilai yang sah (enum) dan model
 # tidak bisa mengarang nilai lain. Penjelajah menampilkannya sebagai dropdown.
 TipeAlat = Literal["ESP", "SRP", "PCP", "Flowline", "Separator", "Steam Generator", "Gas Compressor", "Water Injection Pump"]
+KategoriKegagalan = Literal["Mechanical", "Electrical", "Leak/Corrosion", "Instrumentation/Control", "Flow Assurance",
+                            "Preventive Maintenance", "Process/Trip"]
 Tingkat = Literal["Rendah", "Sedang", "Tinggi"]
 Bahaya = Literal["Hot Work/Fire", "Working at Height", "Vehicle/Driving", "Spill/Release", "Electrical", "Dropped Object",
                  "H2S/Gas", "Steam/Hot Surface", "Manual Handling", "Pinch Point"]
@@ -250,6 +253,50 @@ def statistik_kegagalan(tipe_peralatan: TipeAlat | None = None) -> str:
     teks = [f"Kegagalan {judul}: {len(baris)} work order, total downtime {baris['downtime_hours'].sum():.0f} jam."]
     for kategori, r in ringkas.iterrows():
         teks.append(f"- {kategori}: {int(r['count'])} work order, {r['sum']:.0f} jam")
+    return "\n".join(teks)
+
+
+@tool(parse_docstring=True)
+def cari_work_order(kategori: KategoriKegagalan | None = None, komponen: str | None = None, tipe_peralatan: TipeAlat | None = None,
+                    area: AreaSumur | None = None, dari: str | None = None, sampai: str | None = None, maks: int = 10) -> str:
+    """Cari work order di seluruh aset menurut kategori kegagalan, komponen, tipe peralatan, area, dan rentang tanggal. Semua filter bersifat opsional.
+
+    Args:
+        kategori: Kategori kegagalan (pilihan terbatas).
+        komponen: Sebagian nama komponen, contoh "Power Cable" atau "VSD".
+        tipe_peralatan: Tipe peralatan (pilihan terbatas).
+        area: Area lapangan (pilihan terbatas).
+        dari: Tanggal awal format YYYY-MM-DD, contoh "2026-07-01". Data tersedia 2026-01-01 sampai 2026-09-30.
+        sampai: Tanggal akhir format YYYY-MM-DD, contoh "2026-07-31".
+        maks: Jumlah work order terbaru yang ditampilkan (minimal 1, tanpa batas atas). Isi 1000 untuk menampilkan semua yang cocok.
+    """
+    for nama, nilai in (("dari", dari), ("sampai", sampai)):
+        if nilai and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", nilai.strip()):
+            return f"Tanggal '{nama}' harus berformat YYYY-MM-DD, contoh 2026-07-01. Diterima: {nilai}."
+    baris = _work_order()
+    if kategori:
+        baris = baris[baris["failure_category"] == kategori]
+    if tipe_peralatan:
+        baris = baris[baris["equipment_type"] == tipe_peralatan]
+    if area:
+        baris = baris[baris["area"] == area]
+    if komponen:
+        cocok = baris["component"].str.contains(komponen.strip(), case=False, regex=False)
+        if not cocok.any():
+            return (f"Tidak ada work order dengan komponen yang mengandung '{komponen}'. "
+                    f"Komponen yang ada: {', '.join(sorted(_work_order()['component'].unique()))}.")
+        baris = baris[cocok]
+    if dari:
+        baris = baris[baris["tanggal"] >= dari.strip()]
+    if sampai:
+        baris = baris[baris["tanggal"] <= sampai.strip()]
+    if baris.empty:
+        return "Tidak ada work order yang cocok dengan filter tersebut. Data tersedia 2026-01-01 sampai 2026-09-30."
+    tampil = max(1, min(maks, len(baris)))
+    teks = [f"{len(baris)} work order cocok, total downtime {baris['downtime_hours'].sum():.1f} jam. Ditampilkan {tampil} terbaru:"]
+    for _, r in baris.head(tampil).iterrows():
+        teks.append(f"- {r['wo_id']} ({r['tanggal']}, {r['asset_id']}, {r['equipment_type']}, {r['area']}): {r['failure_category']}, "
+                    f"komponen {r['component']}, tindakan {r['action_category']}, downtime {r['downtime_hours']} jam")
     return "\n".join(teks)
 
 
@@ -585,12 +632,12 @@ KATALOG: dict[str, list] = {
     "Operasi": [laporan_harian, ringkasan_produksi_bulanan, bandingkan_produksi, hari_berkejadian,
                 cek_status_sumur, daftar_sumur, produksi_sumur, riwayat_work_order, cari_dokumen_sop,
                 hitung_water_cut, catat_serah_terima],
-    "Perawatan": [riwayat_work_order, statistik_kegagalan, aset_downtime_tertinggi, cek_status_sumur, daftar_sumur,
-                  produksi_sumur, cari_dokumen_sop, cari_dokumen_manual, buat_work_order, tutup_work_order],
+    "Perawatan": [riwayat_work_order, cari_work_order, statistik_kegagalan, aset_downtime_tertinggi, cek_status_sumur,
+                  daftar_sumur, produksi_sumur, cari_dokumen_sop, cari_dokumen_manual, buat_work_order, tutup_work_order],
     "HSE": [cari_insiden, ringkasan_insiden, cek_status_sumur, riwayat_work_order, cari_dokumen_sop,
             cari_dokumen_laporan, cari_dokumen_investigasi, usulkan_tindakan_korektif, kirim_notifikasi_hse],
     "Engineering": [cari_dokumen_sop, cari_dokumen_manual, cari_dokumen_laporan, konversi_satuan, hitung_water_cut,
-                    cek_status_sumur, daftar_sumur, produksi_sumur, riwayat_work_order, ubah_setpoint_vsd],
+                    cek_status_sumur, daftar_sumur, produksi_sumur, riwayat_work_order, cari_work_order, ubah_setpoint_vsd],
 }
 
 
