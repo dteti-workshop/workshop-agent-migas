@@ -257,11 +257,13 @@ def statistik_kegagalan(tipe_peralatan: TipeAlat | None = None) -> str:
 
 
 @tool(parse_docstring=True)
-def cari_work_order(kategori: KategoriKegagalan | None = None, komponen: str | None = None, tipe_peralatan: TipeAlat | None = None,
-                    area: AreaSumur | None = None, dari: str | None = None, sampai: str | None = None, maks: int = 10) -> str:
-    """Cari work order di seluruh aset menurut kategori kegagalan, komponen, tipe peralatan, area, dan rentang tanggal. Semua filter bersifat opsional.
+def cari_work_order(asset_id: str | None = None, kategori: KategoriKegagalan | None = None, komponen: str | None = None,
+                    tipe_peralatan: TipeAlat | None = None, area: AreaSumur | None = None, dari: str | None = None,
+                    sampai: str | None = None, maks: int = 10) -> str:
+    """Cari work order menurut aset, kategori kegagalan, komponen, tipe peralatan, area, dan rentang tanggal. Semua filter bersifat opsional; tanpa asset_id, pencarian mencakup seluruh aset.
 
     Args:
+        asset_id: Kode aset, contoh "SR-020" atau "V-SR1-101". Kosongkan untuk mencari di semua aset.
         kategori: Kategori kegagalan (pilihan terbatas).
         komponen: Sebagian nama komponen, contoh "Power Cable" atau "VSD".
         tipe_peralatan: Tipe peralatan (pilihan terbatas).
@@ -274,6 +276,10 @@ def cari_work_order(kategori: KategoriKegagalan | None = None, komponen: str | N
         if nilai and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", nilai.strip()):
             return f"Tanggal '{nama}' harus berformat YYYY-MM-DD, contoh 2026-07-01. Diterima: {nilai}."
     baris = _work_order()
+    if asset_id:
+        baris = baris[baris["asset_id"].str.upper() == asset_id.strip().upper()]
+        if baris.empty:
+            return f"Tidak ada work order untuk aset {asset_id}."
     if kategori:
         baris = baris[baris["failure_category"] == kategori]
     if tipe_peralatan:
