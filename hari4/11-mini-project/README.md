@@ -155,7 +155,7 @@ def riwayat_work_order(asset_id: str, maks: int = 5) -> str:
 
     Args:
         asset_id: Kode aset, contoh "SR-020" atau "V-SR1-101".
-        maks: Jumlah work order terbaru yang ditampilkan (1 sampai 10).
+        maks: Jumlah work order terbaru yang ditampilkan (minimal 1, tanpa batas atas). Isi 1000 untuk menampilkan seluruh riwayat.
     """
     ...
 
